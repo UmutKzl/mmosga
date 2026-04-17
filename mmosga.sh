@@ -62,3 +62,8 @@ zellij fzf ripgrep bat eza zoxide gh python \
 wezterm alacritty kitty ghostty raycast mac-mouse-fix \
 steam epic-games gog-galaxy heroic luanti supertuxkart"
 brew install $(gum choose --no-limit $apps --header "Select apps to install")
+
+# Rosetta 2
+if gum confirm "Do you want to install Rosetta 2?" ; then
+  softwareupdate --install-rosetta --agree-to-license
+fi
