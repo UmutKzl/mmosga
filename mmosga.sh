@@ -1,0 +1,58 @@
+#!/usr/bin/env bash
+
+if ! gum confirm "Do you want to proceed?" ; then
+  exit 1
+fi
+
+# Dock
+defaults write com.apple.dock magnification -bool true
+defaults write com.apple.dock largesize -int 80
+defaults write com.apple.dock autohide-time-modifier -float 0.5
+defaults write com.apple.dock autohide-delay -float 0
+echo "Dock settings are finished."
+
+# Finder
+defaults write com.apple.finder AppleShowAllFiles -bool true
+defaults write com.apple.finder ShowPathbar -bool true
+defaults write com.apple.finder ShowStatusBar -bool true
+defaults write com.apple.finder FXPreferredViewStyle -string "Nlsv"
+defaults write com.apple.finder NewWindowTarget -string "PfHm"
+defaults write com.apple.finder NewWindowTargetPath -string "file://${HOME}/"
+defaults write com.apple.finder QLEnableTextSelection -bool true
+defaults write com.apple.desktopservices DSDontWriteNetworkStores -bool true
+echo "Finder settings are finished."
+
+# Trackpad
+defaults write NSGlobalDomain com.apple.swipescrolldirection -bool false
+echo "Trackpad settings are finished."
+
+# Accent color
+defaults write -g AppleAccentColor -int 5
+defaults write -g AppleColorPreferences -dict AccentColor -int 5
+defaults write -g AppleHighlightColor -string "0.968627 0.831373 1.000000 Purple"
+echo "Accent color has been set up to purple."
+
+# Launch services
+defaults write com.apple.LaunchServices LSQuarantine -bool false
+echo "Launch services settings are finished."
+
+# Install apps
+installapp() {
+  if ! gum confirm "Do you want to install $1?"; then
+    return
+  fi
+
+  brew install $1
+}
+
+installapp spotify
+installapp google-chrome
+installapp raycast
+installapp visual-studio-code
+installapp neovim
+
+# Kill services
+killall Dock
+killall SystemUIServer
+killall Finder
+echo "Restarted services."
