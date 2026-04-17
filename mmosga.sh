@@ -1,18 +1,20 @@
 #!/usr/bin/env bash
 
-if ! command -v brew; then
+if ! command -v brew >/dev/null; then
   echo "Install homebrew and rerun this command."
 fi
 
+clear
 if ! gum confirm "Do you want to proceed?" ; then
   exit 1
 fi
 
-if ! command -v gum; then
+if ! command -v gum >/dev/null; then
   echo "Installing gum."
   brew install gum
 fi
 
+clear
 # Dock
 defaults write com.apple.dock magnification -bool true
 defaults write com.apple.dock largesize -int 80
@@ -46,6 +48,13 @@ echo "Accent color has been set up to purple."
 defaults write com.apple.LaunchServices LSQuarantine -bool false
 echo "Launch services settings are finished."
 
+# Kill services
+killall Dock
+killall SystemUIServer
+killall Finder
+echo "Restarted services."
+
+clear
 # Install apps
 apps="spotify google-chrome ungoogled-chromium firefox \
 lazygit neovim visual-studio-code godot zed emacs helix tmux \
@@ -53,9 +62,3 @@ zellij fzf ripgrep bat eza zoxide gh python \
 wezterm alacritty kitty ghostty raycast mac-mouse-fix \
 steam epic-games gog-galaxy heroic luanti supertuxkart"
 brew install $(gum choose --no-limit $apps --header "Select apps to install")
-
-# Kill services
-killall Dock
-killall SystemUIServer
-killall Finder
-echo "Restarted services."
