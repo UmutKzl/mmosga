@@ -7,6 +7,7 @@ fi
 # Dock
 defaults write com.apple.dock magnification -bool true
 defaults write com.apple.dock largesize -int 80
+defaults write com.apple.dock autohide -bool true
 defaults write com.apple.dock autohide-time-modifier -float 0.5
 defaults write com.apple.dock autohide-delay -float 0
 echo "Dock settings are finished."
@@ -37,22 +38,15 @@ defaults write com.apple.LaunchServices LSQuarantine -bool false
 echo "Launch services settings are finished."
 
 # Install apps
-installapp() {
-  if ! gum confirm "Do you want to install $1?"; then
-    return
-  fi
+music="spotify"
+browsers="google-chrome ungoogled-chromium firefox"
+development="lazygit neovim visual-studio-code"
+productivity="raycast"
 
-  brew install $1
-}
-
-installapp spotify
-installapp google-chrome
-installapp raycast
-installapp visual-studio-code
-installapp neovim
-installapp lazygit
-installapp firefox
-installapp ungoogled-chromium
+brew install $(gum choose --no-limit $music --header "Music apps")
+brew install $(gum choose --no-limit $browsers --header "Browsers")
+brew install $(gum choose --no-limit $development --header "Development apps")
+brew install $(gum choose --no-limit $productivity --header "Productivity apps")
 
 # Kill services
 killall Dock
