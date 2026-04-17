@@ -1,7 +1,16 @@
 #!/usr/bin/env bash
 
+if ! command -v brew; then
+  echo "Install homebrew and rerun this command."
+fi
+
 if ! gum confirm "Do you want to proceed?" ; then
   exit 1
+fi
+
+if ! command -v gum; then
+  echo "Installing gum."
+  brew install gum
 fi
 
 # Dock
