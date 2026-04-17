@@ -38,7 +38,11 @@ defaults write com.apple.LaunchServices LSQuarantine -bool false
 echo "Launch services settings are finished."
 
 # Install apps
-apps="spotify google-chrome ungoogled-chromium firefox lazygit neovim visual-studio-code raycast"
+apps="spotify google-chrome ungoogled-chromium firefox \
+lazygit neovim visual-studio-code godot zed emacs helix tmux \
+zellij fzf ripgrep bat eza zoxide gh python \
+wezterm alacritty kitty ghostty raycast mac-mouse-fix \
+steam epic-games gog-galaxy heroic luanti supertuxkart"
 brew install $(gum choose --no-limit $apps --header "Select apps to install")
 
 # Kill services
