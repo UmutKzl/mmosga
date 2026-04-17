@@ -38,15 +38,8 @@ defaults write com.apple.LaunchServices LSQuarantine -bool false
 echo "Launch services settings are finished."
 
 # Install apps
-music="spotify"
-browsers="google-chrome ungoogled-chromium firefox"
-development="lazygit neovim visual-studio-code"
-productivity="raycast"
-
-brew install $(gum choose --no-limit $music --header "Music apps")
-brew install $(gum choose --no-limit $browsers --header "Browsers")
-brew install $(gum choose --no-limit $development --header "Development apps")
-brew install $(gum choose --no-limit $productivity --header "Productivity apps")
+apps="spotify google-chrome ungoogled-chromium firefox lazygit neovim visual-studio-code raycast"
+brew install $(gum choose --no-limit $apps --header "Select apps to install")
 
 # Kill services
 killall Dock
