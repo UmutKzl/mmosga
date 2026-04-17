@@ -50,6 +50,9 @@ installapp google-chrome
 installapp raycast
 installapp visual-studio-code
 installapp neovim
+installapp lazygit
+installapp firefox
+installapp ungoogled-chromium
 
 # Kill services
 killall Dock
