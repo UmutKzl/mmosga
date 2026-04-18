@@ -1,11 +1,8 @@
 #!/usr/bin/env bash
+set -euo pipefail
 
 if ! command -v brew >/dev/null; then
   echo "Install homebrew and rerun this command."
-fi
-
-clear
-if ! gum confirm "Do you want to proceed?" ; then
   exit 1
 fi
 
@@ -15,35 +12,41 @@ if ! command -v gum >/dev/null; then
 fi
 
 clear
+
+if ! gum confirm "Do you want to proceed?" ; then
+  exit 1
+fi
+
+clear
 # Dock
-defaults write com.apple.dock magnification -bool true
-defaults write com.apple.dock largesize -int 80
-defaults write com.apple.dock autohide -bool true
-defaults write com.apple.dock autohide-time-modifier -float 0.5
-defaults write com.apple.dock autohide-delay -float 0
+defaults write com.apple.dock magnification -bool true # enable magnification
+defaults write com.apple.dock largesize -int 80 # set magnification level
+defaults write com.apple.dock autohide -bool true # enable autohide
+defaults write com.apple.dock autohide-time-modifier -float 0.5 # speed up autohide animation
+defaults write com.apple.dock autohide-delay -float 0 # remove autohide delay
 echo "Dock settings are finished."
 
 # Finder
-defaults write com.apple.finder AppleShowAllFiles -bool true
-defaults write com.apple.finder ShowPathbar -bool true
-defaults write com.apple.finder ShowStatusBar -bool true
-defaults write com.apple.finder FXPreferredViewStyle -string "Nlsv"
-defaults write com.apple.finder NewWindowTarget -string "PfHm"
-defaults write com.apple.finder NewWindowTargetPath -string "file://${HOME}/"
-defaults write com.apple.finder QLEnableTextSelection -bool true
-defaults write com.apple.desktopservices DSDontWriteNetworkStores -bool true
+defaults write com.apple.finder AppleShowAllFiles -bool true # enable hidden files
+defaults write com.apple.finder ShowPathbar -bool true # enable path bar
+defaults write com.apple.finder ShowStatusBar -bool true # enable status bar
+defaults write com.apple.finder FXPreferredViewStyle -string "Nlsv" # set list view default
+defaults write com.apple.finder NewWindowTarget -string "PfHm" # set new finder windows to open in home
+defaults write com.apple.finder NewWindowTargetPath -string "file://${HOME}/" # set Finder home path to user's home folder
+defaults write com.apple.finder QLEnableTextSelection -bool true # enable text selection in quick look
+defaults write com.apple.desktopservices DSDontWriteNetworkStores -bool true # don't store DS_Store files on network
 echo "Finder settings are finished."
 
 # Keyboard
-defaults write NSGlobalDomain NSAutomaticSpellingCorrectionEnabled -bool false
-defaults write NSGlobalDomain NSAutomaticCapitalizationEnabled -bool false
-defaults write NSGlobalDomain NSAutomaticPeriodSubstitutionEnabled -bool false
-defaults write NSGlobalDomain NSAutomaticQuoteSubstitutionEnabled -bool false
-defaults write NSGlobalDomain NSAutomaticDashSubstitutionEnabled -bool false
+defaults write NSGlobalDomain NSAutomaticSpellingCorrectionEnabled -bool false # disable automatic spelling
+defaults write NSGlobalDomain NSAutomaticCapitalizationEnabled -bool false # disable automatic capitalization
+defaults write NSGlobalDomain NSAutomaticPeriodSubstitutionEnabled -bool false # disable automatic period substitution
+defaults write NSGlobalDomain NSAutomaticQuoteSubstitutionEnabled -bool false # disable automatic quote substitution
+defaults write NSGlobalDomain NSAutomaticDashSubstitutionEnabled -bool false # disable automatic dash substitution
 echo "Keyboard settings are finished."
 
 # Trackpad
-defaults write NSGlobalDomain com.apple.swipescrolldirection -bool false
+defaults write NSGlobalDomain com.apple.swipescrolldirection -bool false # disable natural scrolling in trackpad
 echo "Trackpad settings are finished."
 
 # Accent color (purple)
@@ -52,16 +55,12 @@ defaults write -g AppleColorPreferences -dict AccentColor -int 5
 defaults write -g AppleHighlightColor -string "0.968627 0.831373 1.000000 Purple"
 echo "Accent color has been set up to purple."
 
-# Launch services
-defaults write com.apple.LaunchServices LSQuarantine -bool false
-echo "Launch services settings are finished."
+# Quarantine settings
+defaults write com.apple.LaunchServices LSQuarantine -bool false # less Are you sure? prompts
+echo "Quarantine settings are finished."
 
 # Kill services
-killall Dock
-killall SystemUIServer
-killall Finder
-killall TextEdit
-echo "Restarted services."
+killall Dock SystemUIServer Finder TextEdit
 
 clear
 
@@ -72,20 +71,27 @@ apps="spotify google-chrome ungoogled-chromium firefox vivaldi \
   alacritty kitty ghostty utm raycast mac-mouse-fix betterdisplay caffeine rectangle \
   steam epic-games gog-galaxy parallels crossover heroic luanti supertuxkart obs \
   lm-studio ollama claude claude-code opencode chatgpt chatgpt-atlas llama.cpp"
-brew install $(gum choose --no-limit $apps --header "Select apps to install")
+
+app_selection=$(gum choose --no-limit $apps --header "Select apps to install")
+
+if [ -n "$app_selection" ]; then
+  brew install $app_selection
+else
+  echo "No package selected, continuing..."
+fi
 
 # Rosetta 2
 if gum confirm "Do you want to install Rosetta 2?" ; then
   softwareupdate --install-rosetta --agree-to-license
 fi
 
-# LazyVim
+# Neovim
 if command -v nvim >/dev/null; then
   if [ ! -d "$HOME/.config/nvim" ] && gum confirm "Do you want to install a Neovim config?"; then
     distro=$(gum choose --header "Neovim distro" nvchad lazyvim astronvim)
 
-    command -v node >/dev/null || brew install node
-    command -v tree-sitter >/dev/null || brew install tree-sitter-cli
+    command -v node >/dev/null || brew install node || true
+    command -v tree-sitter >/dev/null || brew install tree-sitter-cli || true
 
     case "$distro" in
       nvchad)
@@ -102,9 +108,28 @@ if command -v nvim >/dev/null; then
         rm -rf ~/.config/nvim/.git
         ;;
     esac
+  else
+    echo "Skipping Neovim config section because you already have a Neovim config."
   fi
-else
-  echo "Skipping LazyVim section because you already have a Neovim config."
+fi
+
+# Emacs
+if command -v emacs >/dev/null; then
+  if [ ! -d "$HOME/.emacs.d" ] && [ ! -d "$HOME/.config/emacs" ] && gum confirm "Do you want to install a Emacs config?"; then
+    distro=$(gum choose --header "Emacs distro" spacemacs doom-emacs)
+
+    case "$distro" in
+      doom-emacs)
+        git clone --depth 1 https://github.com/doomemacs/doomemacs ~/.config/emacs
+        ~/.config/emacs/bin/doom install
+        ;;
+      spacemacs)
+        git clone --depth 1 https://github.com/syl20bnr/spacemacs ~/.emacs.d
+        ;;
+    esac
+  else
+    echo "Skipping Emacs config section because you already have a Emacs config."
+  fi
 fi
 
 echo "Everything is got finished. Good luck!"
