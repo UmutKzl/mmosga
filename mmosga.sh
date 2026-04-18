@@ -67,11 +67,11 @@ clear
 
 # Choose apps and install them
 apps="spotify google-chrome ungoogled-chromium firefox vivaldi \
-lazygit visual-studio-code zed neovim neovide-app emacs helix godot antigravity \
-cursor windsurf tmux zellij fzf ripgrep bat eza zoxide gh python node wezterm \
-alacritty kitty ghostty raycast mac-mouse-fix betterdisplay caffeine rectangle \
-steam epic-games gog-galaxy parallels crossover heroic luanti supertuxkart obs \
-lm-studio ollama claude claude-code opencode chatgpt chatgpt-atlas llama.cpp"
+  lazygit visual-studio-code zed neovim neovide-app emacs helix godot antigravity \
+  cursor windsurf tmux zellij fzf ripgrep bat eza zoxide gh python node wezterm \
+  alacritty kitty ghostty raycast mac-mouse-fix betterdisplay caffeine rectangle \
+  steam epic-games gog-galaxy parallels crossover heroic luanti supertuxkart obs \
+  lm-studio ollama claude claude-code opencode chatgpt chatgpt-atlas llama.cpp"
 brew install $(gum choose --no-limit $apps --header "Select apps to install")
 
 # Rosetta 2
@@ -81,25 +81,26 @@ fi
 
 # LazyVim
 if command -v nvim >/dev/null; then
-    if [ ! -d "$HOME/.config/nvim" ] && gum confirm "Do you want to install a Neovim config?"; then
-        distro=$(gum choose --header "Neovim distro" nvchad lazyvim)
+  if [ ! -d "$HOME/.config/nvim" ] && gum confirm "Do you want to install a Neovim config?"; then
+    distro=$(gum choose --header "Neovim distro" nvchad lazyvim)
 
-        command -v node >/dev/null || brew install node
+    command -v node >/dev/null || brew install node
+    command -v tree-sitter >/dev/null || brew install tree-sitter-cli
 
-        case "$distro" in
-            nvchad)
-                git clone https://github.com/NvChad/starter ~/.config/nvim
-                rm -rf ~/.config/nvim/.git
-                echo "Don't forget to read wiki https://nvchad.com/docs/quickstart/install"
-                ;;
-            lazyvim)
-                git clone https://github.com/LazyVim/starter ~/.config/nvim
-                rm -rf ~/.config/nvim/.git
-                ;;
-        esac
-    fi
+    case "$distro" in
+      nvchad)
+        git clone https://github.com/NvChad/starter ~/.config/nvim
+        rm -rf ~/.config/nvim/.git
+        echo "Don't forget to read wiki https://nvchad.com/docs/quickstart/install"
+        ;;
+      lazyvim)
+        git clone https://github.com/LazyVim/starter ~/.config/nvim
+        rm -rf ~/.config/nvim/.git
+        ;;
+    esac
+  fi
 else
-    echo "Skipping LazyVim section because you already have a Neovim config."
+  echo "Skipping LazyVim section because you already have a Neovim config."
 fi
 
 echo "Everything is got finished. Good luck!"
