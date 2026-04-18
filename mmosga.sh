@@ -89,12 +89,12 @@ if command -v nvim >/dev/null; then
 
     case "$distro" in
       nvchad)
-        git clone https://github.com/NvChad/starter ~/.config/nvim
+        git clone --depth 1 https://github.com/NvChad/starter ~/.config/nvim
         rm -rf ~/.config/nvim/.git
         echo "Don't forget to read wiki https://nvchad.com/docs/quickstart/install"
         ;;
       lazyvim)
-        git clone https://github.com/LazyVim/starter ~/.config/nvim
+        git clone --depth 1 https://github.com/LazyVim/starter ~/.config/nvim
         rm -rf ~/.config/nvim/.git
         ;;
       astronvim)
