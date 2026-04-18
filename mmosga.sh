@@ -82,7 +82,7 @@ fi
 # LazyVim
 if command -v nvim >/dev/null; then
   if [ ! -d "$HOME/.config/nvim" ] && gum confirm "Do you want to install a Neovim config?"; then
-    distro=$(gum choose --header "Neovim distro" nvchad lazyvim)
+    distro=$(gum choose --header "Neovim distro" nvchad lazyvim astronvim)
 
     command -v node >/dev/null || brew install node
     command -v tree-sitter >/dev/null || brew install tree-sitter-cli
@@ -95,6 +95,10 @@ if command -v nvim >/dev/null; then
         ;;
       lazyvim)
         git clone https://github.com/LazyVim/starter ~/.config/nvim
+        rm -rf ~/.config/nvim/.git
+        ;;
+      astronvim)
+        git clone --depth 1 https://github.com/AstroNvim/template ~/.config/nvim
         rm -rf ~/.config/nvim/.git
         ;;
     esac
