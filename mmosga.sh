@@ -67,8 +67,8 @@ clear
 
 # Choose apps and install them
 apps="spotify google-chrome ungoogled-chromium firefox vivaldi \
-lazygit visual-studio-code zed neovim emacs helix godot antigravity \
-cursor windsurf tmux zellij fzf ripgrep bat eza zoxide gh python wezterm \
+lazygit visual-studio-code zed neovim neovide-app emacs helix godot antigravity \
+cursor windsurf tmux zellij fzf ripgrep bat eza zoxide gh python node wezterm \
 alacritty kitty ghostty raycast mac-mouse-fix betterdisplay caffeine rectangle \
 steam epic-games gog-galaxy parallels crossover heroic luanti supertuxkart obs \
 lm-studio ollama claude claude-code opencode chatgpt chatgpt-atlas llama.cpp"
@@ -83,6 +83,8 @@ fi
 if command -v nvim >/dev/null; then
     if [ ! -d "$HOME/.config/nvim" ] && gum confirm "Do you want to install a Neovim config?"; then
         distro=$(gum choose --header "Neovim distro" nvchad lazyvim)
+
+        command -v node >/dev/null || brew install node
 
         case "$distro" in
             nvchad)
