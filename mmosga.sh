@@ -126,7 +126,7 @@ clear
 apps="spotify google-chrome ungoogled-chromium firefox vivaldi \
   lazygit visual-studio-code zed neovim neovide-app emacs helix godot antigravity \
   cursor windsurf tmux zellij fzf ripgrep bat eza zoxide gh python node wezterm \
-  alacritty kitty ghostty utm raycast mac-mouse-fix betterdisplay caffeine rectangle \
+  alacritty kitty ghostty utm raycast mac-mouse-fix betterdisplay wallspace caffeine rectangle \
   steam epic-games gog-galaxy parallels crossover heroic luanti supertuxkart obs \
   lm-studio ollama claude claude-code opencode chatgpt chatgpt-atlas llama.cpp"
 
