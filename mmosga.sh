@@ -28,6 +28,12 @@ else
   defaults write com.apple.dock magnification -bool false # disable magnification
 fi
 
+if gum confirm "Do you want to disable recent apps from dock?"; then
+  defaults write com.apple.dock show-recents -bool false # disable recent apps
+else
+  defaults write com.apple.dock show-recents -bool true # enable recent apps
+fi
+
 if gum confirm "Do you want to autohide dock?"; then
   defaults write com.apple.dock autohide -bool true # enable autohide
   defaults write com.apple.dock autohide-time-modifier -float 0.5 # speed up autohide animation
