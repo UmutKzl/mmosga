@@ -232,7 +232,7 @@ if command -v ghostty >/dev/null; then
   [[ "$force" == "true" ]] && rm -rf ~/.config/ghostty || true
   if [ ! -f "$HOME/.config/ghostty/config" ] && [ ! -f "$HOME/.config/ghostty/config.ghostty" ] && gum confirm "Do you want to configure Ghostty?"; then
     [[ ! -d ~/.config/ghostty ]] && mkdir -p ~/.config/ghostty # create config folder if doesn't exist
-    echo "background-opacity = $(gum input --placeholder 'Transparency (between 0.0 and 1.0)')" >> ~/.config/ghostty/config.ghostty
+    echo "background-opacity = $(gum input --header 'Transparency (between 0.0 and 1.0)' --value '1.0')" >> ~/.config/ghostty/config.ghostty
     gum confirm "Do you want to use Option key as Alt?" && echo "macos-option-as-alt = left" >> ~/.config/ghostty/config.ghostty
     scheme=$(ghostty +list-themes | sed -E 's/ \(resources\)$//' | gum choose --header "Select a color scheme")
     echo "theme = $scheme" >> ~/.config/ghostty/config.ghostty
