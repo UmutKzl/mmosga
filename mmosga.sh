@@ -21,47 +21,92 @@ brewprefix="$(brew --prefix)"
 
 clear
 # Dock
-defaults write com.apple.dock magnification -bool true # enable magnification
-defaults write com.apple.dock largesize -int 80 # set magnification level
-defaults write com.apple.dock autohide -bool true # enable autohide
-defaults write com.apple.dock autohide-time-modifier -float 0.5 # speed up autohide animation
-defaults write com.apple.dock autohide-delay -float 0 # remove autohide delay
+if gum confirm "Do you want to enable magnification?"; then
+  defaults write com.apple.dock magnification -bool true # enable magnification
+  defaults write com.apple.dock largesize -int 80 # set magnification level
+else
+  defaults write com.apple.dock magnification -bool false # disable magnification
+fi
+
+if gum confirm "Do you want to autohide dock?"; then
+  defaults write com.apple.dock autohide -bool true # enable autohide
+  defaults write com.apple.dock autohide-time-modifier -float 0.5 # speed up autohide animation
+  defaults write com.apple.dock autohide-delay -float 0 # remove autohide delay
+else
+  defaults write com.apple.dock autohide -bool false # disable autohide
+fi
 echo "Dock settings are finished..."
 
 # Finder
+if gum confirm "Do you want to see hidden files by default?"; then
 defaults write com.apple.finder AppleShowAllFiles -bool true # enable hidden files
+else
+defaults write com.apple.finder AppleShowAllFiles -bool false # disable hidden files
+fi
+
+if gum confirm "Do you want to enable path bar and status bar?"; then
 defaults write com.apple.finder ShowPathbar -bool true # enable path bar
 defaults write com.apple.finder ShowStatusBar -bool true # enable status bar
+else
+defaults write com.apple.finder ShowPathbar -bool false # disable path bar
+defaults write com.apple.finder ShowStatusBar -bool false # disable status bar
+fi
+
+finder_view_choice=$(gum choose list icon)
+case "$finder_view_choice" in
+list)
 defaults write com.apple.finder FXPreferredViewStyle -string "Nlsv" # set list view default
+;;
+icon)
+defaults write com.apple.finder FXPreferredViewStyle -string "icnv" # set icon view default
+;;
+esac
+
+if gum confirm "Do you want to start finder from $HOME folder?"; then
 defaults write com.apple.finder NewWindowTarget -string "PfHm" # set new finder windows to open in home
 defaults write com.apple.finder NewWindowTargetPath -string "file://${HOME}/" # set Finder home path to user's home folder
+fi
+
+if gum confirm "Do you want to enable text selection in Quick look?"; then
 defaults write com.apple.finder QLEnableTextSelection -bool true # enable text selection in quick look
+else
+defaults write com.apple.finder QLEnableTextSelection -bool false # disable text selection in quick look
+fi
+
+if gum confirm "Do you want to disable storing DS_Store files on network?"; then
 defaults write com.apple.desktopservices DSDontWriteNetworkStores -bool true # don't store DS_Store files on network
+else
+defaults write com.apple.desktopservices DSDontWriteNetworkStores -bool false # store DS_Store files on network
+fi
+
 echo "Finder settings are finished..."
 
 # Keyboard
+if gum confirm "Do you want automatic periods, capitalization, spelling, quotes to get disabled in your keyboard?"; then
 defaults write NSGlobalDomain NSAutomaticSpellingCorrectionEnabled -bool false # disable automatic spelling
 defaults write NSGlobalDomain NSAutomaticCapitalizationEnabled -bool false # disable automatic capitalization
 defaults write NSGlobalDomain NSAutomaticPeriodSubstitutionEnabled -bool false # disable automatic period substitution
-defaults write NSGlobalDomain NSAutomaticQuoteSubstitutionEnabled -bool false # disable automatic quote substitution defaults write NSGlobalDomain NSAutomaticDashSubstitutionEnabled -bool false # disable automatic dash substitution
+defaults write NSGlobalDomain NSAutomaticQuoteSubstitutionEnabled -bool false # disable automatic quote substitution
+defaults write NSGlobalDomain NSAutomaticDashSubstitutionEnabled -bool false # disable automatic dash substitution
+else
+defaults write NSGlobalDomain NSAutomaticSpellingCorrectionEnabled -bool true # enable automatic spelling
+defaults write NSGlobalDomain NSAutomaticCapitalizationEnabled -bool true # enable automatic capitalization
+defaults write NSGlobalDomain NSAutomaticPeriodSubstitutionEnabled -bool true # enable automatic period substitution
+defaults write NSGlobalDomain NSAutomaticQuoteSubstitutionEnabled -bool true # enable automatic quote substitution
+defaults write NSGlobalDomain NSAutomaticDashSubstitutionEnabled -bool true # enable automatic dash substitution
+fi
 echo "Keyboard settings are finished..."
 
 # Trackpad
+if gum confirm "Do you want to disable natural scroll?"; then
 defaults write NSGlobalDomain com.apple.swipescrolldirection -bool false # disable natural scrolling in trackpad
+else
+defaults write NSGlobalDomain com.apple.swipescrolldirection -bool true # enable natural scrolling in trackpad
+fi
 echo "Trackpad settings are finished..."
 
-# Accent color (purple)
-defaults write -g AppleAccentColor -int 5
-defaults write -g AppleColorPreferences -dict AccentColor -int 5
-defaults write -g AppleHighlightColor -string "0.968627 0.831373 1.000000 Purple"
-echo "Accent color has been set up to purple..."
-
-# Quarantine settings
-defaults write com.apple.LaunchServices LSQuarantine -bool false # less Are you sure? prompts
-echo "Quarantine settings are finished..."
-
 # Kill services
-killall Dock SystemUIServer Finder TextEdit
+killall Dock SystemUIServer Finder TextEdit || true
 
 clear
 
