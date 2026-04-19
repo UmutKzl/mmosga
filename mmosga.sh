@@ -76,7 +76,7 @@ esac
 
 if gum confirm "Do you want to start finder from $HOME folder?"; then
   defaults write com.apple.finder NewWindowTarget -string "PfHm" # set new finder windows to open in home
-  defaults write com.apple.finder NewWindowTargetPath -string "file://${HOME}/" # set Finder home path to user's home folder
+  defaults write com.apple.finder NewWindowTargetPath -string "file://${HOME}/" # set Finder home path to user's home
 fi
 
 if gum confirm "Do you want to enable text selection in Quick look?"; then
@@ -139,7 +139,8 @@ else
 fi
 
 # Rosetta 2
-if ! pkgutil --pkg-info com.apple.pkg.RosettaUpdateAuto >/dev/null && gum confirm "Do you want to install Rosetta 2?" ; then
+if ! pkgutil --pkg-info com.apple.pkg.RosettaUpdateAuto >/dev/null && \
+  gum confirm "Do you want to install Rosetta 2?"; then
   softwareupdate --install-rosetta --agree-to-license
 else
   echo "Skipping Rosetta 2..."
@@ -179,7 +180,8 @@ fi
 # Emacs
 if command -v emacs >/dev/null; then
   [[ "$force" == "true" ]] && rm -rf ~/.config/emacs || true
-  if [ ! -d "$HOME/.emacs.d" ] && [ ! -d "$HOME/.config/emacs" ] && gum confirm "Do you want to install a Emacs config?"; then
+  if [ ! -d "$HOME/.emacs.d" ] && [ ! -d "$HOME/.config/emacs" ] && \
+    gum confirm "Do you want to install a Emacs config?"; then
     distro=$(gum choose --header "Emacs distro" spacemacs doom-emacs)
 
     case "$distro" in
@@ -201,8 +203,9 @@ if command -v zsh >/dev/null; then
   [[ "$force" == "true" ]] && rm -rf ~/.zshrc || true
   if [ ! -f "$HOME/.zshrc" ] && gum confirm "Do you want to configure Zsh?"; then
     if gum confirm "Do you want to use zsh-syntax-highlighting?"; then
-      [[ ! -f "$brewprefix/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh" ]] && brew install zsh-syntax-highlighting
-      echo "source $brewprefix/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh" >> ~/.zshrc # enable autosyntax
+      [[ ! -f "$brewprefix/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh" ]] && \
+        brew install zsh-syntax-highlighting
+      echo "source $brewprefix/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh" >> ~/.zshrc # enable highlight
     fi
     if gum confirm "Do you want to use zsh-autosuggestions?"; then
       [[ ! -f "$brewprefix/share/zsh-autosuggestions/zsh-autosuggestions.zsh" ]] && brew install zsh-autosuggestions
@@ -230,10 +233,13 @@ fi
 # Ghostty
 if command -v ghostty >/dev/null; then
   [[ "$force" == "true" ]] && rm -rf ~/.config/ghostty || true
-  if [ ! -f "$HOME/.config/ghostty/config" ] && [ ! -f "$HOME/.config/ghostty/config.ghostty" ] && gum confirm "Do you want to configure Ghostty?"; then
+  if [ ! -f "$HOME/.config/ghostty/config" ] && [ ! -f "$HOME/.config/ghostty/config.ghostty" ] && \
+    gum confirm "Do you want to configure Ghostty?"; then
     [[ ! -d ~/.config/ghostty ]] && mkdir -p ~/.config/ghostty # create config folder if doesn't exist
-    echo "background-opacity = $(gum input --header 'Transparency (between 0.0 and 1.0)' --value '1.0')" >> ~/.config/ghostty/config.ghostty
-    gum confirm "Do you want to use Option key as Alt?" && echo "macos-option-as-alt = left" >> ~/.config/ghostty/config.ghostty
+    echo "background-opacity = $(gum input --header 'Transparency (between 0.0 and 1.0)' --value '1.0')" >> \
+      ~/.config/ghostty/config.ghostty
+    gum confirm "Do you want to use Option key as Alt?" && echo "macos-option-as-alt = left" >> \
+      ~/.config/ghostty/config.ghostty
     scheme=$(ghostty +list-themes | sed -E 's/ \(resources\)$//' | gum choose --header "Select a color scheme")
     echo "theme = $scheme" >> ~/.config/ghostty/config.ghostty
   else
