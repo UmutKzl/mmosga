@@ -41,8 +41,7 @@ echo "Finder settings are finished."
 defaults write NSGlobalDomain NSAutomaticSpellingCorrectionEnabled -bool false # disable automatic spelling
 defaults write NSGlobalDomain NSAutomaticCapitalizationEnabled -bool false # disable automatic capitalization
 defaults write NSGlobalDomain NSAutomaticPeriodSubstitutionEnabled -bool false # disable automatic period substitution
-defaults write NSGlobalDomain NSAutomaticQuoteSubstitutionEnabled -bool false # disable automatic quote substitution
-defaults write NSGlobalDomain NSAutomaticDashSubstitutionEnabled -bool false # disable automatic dash substitution
+defaults write NSGlobalDomain NSAutomaticQuoteSubstitutionEnabled -bool false # disable automatic quote substitution defaults write NSGlobalDomain NSAutomaticDashSubstitutionEnabled -bool false # disable automatic dash substitution
 echo "Keyboard settings are finished."
 
 # Trackpad
@@ -92,6 +91,7 @@ if command -v nvim >/dev/null; then
 
     command -v node >/dev/null || brew install node || true
     command -v tree-sitter >/dev/null || brew install tree-sitter-cli || true
+    command -v rg >/dev/null || brew install ripgrep || true
 
     case "$distro" in
       nvchad)
@@ -106,6 +106,7 @@ if command -v nvim >/dev/null; then
       astronvim)
         git clone --depth 1 https://github.com/AstroNvim/template ~/.config/nvim
         rm -rf ~/.config/nvim/.git
+        echo "Don't forget to read wiki https://docs.astronvim.com/#-setup"
         ;;
     esac
   else
@@ -129,6 +130,30 @@ if command -v emacs >/dev/null; then
     esac
   else
     echo "Skipping Emacs config section because you already have a Emacs config."
+  fi
+fi
+
+# Zsh
+if command -v zsh >/dev/null; then
+  if [ -f "$HOME/.zshrc" ] && gum confirm "Do you want to configure Zsh?"; then
+    if gum confirm "Do you want to use zsh-syntax-highlighting?"; then
+      brew install zsh-syntax-highlighting
+      echo "source /opt/homebrew/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh" >> ~/.zshrc # enable autosyntax
+    fi
+    if gum confirm "Do you want to use zsh-autosuggestions?"; then
+      brew install zsh-autosuggestions
+      echo "source /opt/homebrew/share/zsh-autosuggestions/zsh-autosuggestions.zsh" >> ~/.zshrc # enable autosuggestions
+    fi
+    if gum confirm "Do you want to use a custom prompt?"; then
+      echo "export PS1='%B%F{Cyan}%~%b%F{white} $ '" >> ~/.zshrc # a better prompt
+    fi
+    if gum confirm "Do you want to have a better tab selection?"; then
+      echo "autoload -Uz compinit" >> ~/.zshrc
+      echo "compinit" >> ~/.zshrc # modern zsh autocomplete system
+      echo "zstyle ':completion:*' menu select" >> ~/.zshrc # use arrow keys
+    fi
+  else
+    echo "Skipping Zsh config section because you already have a Zsh config."
   fi
 fi
 
