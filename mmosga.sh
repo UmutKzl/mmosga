@@ -80,8 +80,10 @@ else
 fi
 
 # Rosetta 2
-if gum confirm "Do you want to install Rosetta 2?" ; then
+if ! pkgutil --pkg-info com.apple.pkg.RosettaUpdateAuto >/dev/null && gum confirm "Do you want to install Rosetta 2?" ; then
   softwareupdate --install-rosetta --agree-to-license
+else
+  echo "Skipping Rosetta 2 because you already have it."
 fi
 
 # Neovim
