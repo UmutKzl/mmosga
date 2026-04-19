@@ -135,7 +135,7 @@ fi
 
 # Zsh
 if command -v zsh >/dev/null; then
-  if [ -f "$HOME/.zshrc" ] && gum confirm "Do you want to configure Zsh?"; then
+  if [ ! -f "$HOME/.zshrc" ] && gum confirm "Do you want to configure Zsh?"; then
     if gum confirm "Do you want to use zsh-syntax-highlighting?"; then
       brew install zsh-syntax-highlighting
       echo "source /opt/homebrew/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh" >> ~/.zshrc # enable autosyntax
@@ -154,6 +154,19 @@ if command -v zsh >/dev/null; then
     fi
   else
     echo "Skipping Zsh config section because you already have a Zsh config."
+  fi
+fi
+
+# Ghostty
+if command -v ghostty >/dev/null; then
+  if [ ! -f "$HOME/.config/ghostty/config" ] && [ ! -f "$HOME/.config/ghostty/config.ghostty" ] && gum confirm "Do you want to configure Ghostty?"; then
+    [[ ! -d ~/.config/ghostty ]] && mkdir -p ~/.config/ghostty # create config folder if doesn't exist
+    echo "background-opacity = $(gum input --placeholder 'Transparency (between 0.0 and 1.0)')" >> ~/.config/ghostty/config.ghostty
+    gum confirm "Do you want to use Option key as Alt?" && echo "macos-option-as-alt = left" >> ~/.config/ghostty/config.ghostty
+    scheme=$(ghostty +list-themes | sed 's/ (.*)//' | gum choose --header "Select a color scheme")
+    echo "theme = $scheme" >> ~/.config/ghostty/config.ghostty
+  else
+    echo "Skipping Ghostty config section because you already have a Ghostty config."
   fi
 fi
 
