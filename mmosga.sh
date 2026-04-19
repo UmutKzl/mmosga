@@ -17,6 +17,12 @@ if ! gum confirm "Do you want to proceed?" ; then
   exit 1
 fi
 
+if [ "${1:-}" == "--force" ]; then
+  force="true"
+else
+  force="false"
+fi
+
 brewprefix="$(brew --prefix)"
 
 clear
@@ -141,6 +147,7 @@ fi
 
 # Neovim
 if command -v nvim >/dev/null; then
+  [[ "$force" == "true" ]] && rm -rf ~/.config/nvim ~/.local/share/nvim || true
   if [ ! -d "$HOME/.config/nvim" ] && gum confirm "Do you want to install a Neovim config?"; then
     distro=$(gum choose --header "Neovim distro" nvchad lazyvim astronvim)
 
@@ -171,6 +178,7 @@ fi
 
 # Emacs
 if command -v emacs >/dev/null; then
+  [[ "$force" == "true" ]] && rm -rf ~/.config/emacs || true
   if [ ! -d "$HOME/.emacs.d" ] && [ ! -d "$HOME/.config/emacs" ] && gum confirm "Do you want to install a Emacs config?"; then
     distro=$(gum choose --header "Emacs distro" spacemacs doom-emacs)
 
@@ -180,7 +188,7 @@ if command -v emacs >/dev/null; then
         ~/.config/emacs/bin/doom install
         ;;
       spacemacs)
-        git clone --depth 1 https://github.com/syl20bnr/spacemacs ~/.emacs.d
+        git clone --depth 1 https://github.com/syl20bnr/spacemacs ~/.config/emacs
         ;;
     esac
   else
@@ -190,6 +198,7 @@ fi
 
 # Zsh
 if command -v zsh >/dev/null; then
+  [[ "$force" == "true" ]] && rm -rf ~/.zshrc || true
   if [ ! -f "$HOME/.zshrc" ] && gum confirm "Do you want to configure Zsh?"; then
     if gum confirm "Do you want to use zsh-syntax-highlighting?"; then
       [[ ! -f "$brewprefix/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh" ]] && brew install zsh-syntax-highlighting
@@ -220,6 +229,7 @@ fi
 
 # Ghostty
 if command -v ghostty >/dev/null; then
+  [[ "$force" == "true" ]] && rm -rf ~/.config/ghostty || true
   if [ ! -f "$HOME/.config/ghostty/config" ] && [ ! -f "$HOME/.config/ghostty/config.ghostty" ] && gum confirm "Do you want to configure Ghostty?"; then
     [[ ! -d ~/.config/ghostty ]] && mkdir -p ~/.config/ghostty # create config folder if doesn't exist
     echo "background-opacity = $(gum input --placeholder 'Transparency (between 0.0 and 1.0)')" >> ~/.config/ghostty/config.ghostty
