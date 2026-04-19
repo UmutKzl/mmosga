@@ -51,69 +51,69 @@ echo "Dock settings are finished..."
 
 # Finder
 if gum confirm "Do you want to see hidden files by default?"; then
-defaults write com.apple.finder AppleShowAllFiles -bool true # enable hidden files
+  defaults write com.apple.finder AppleShowAllFiles -bool true # enable hidden files
 else
-defaults write com.apple.finder AppleShowAllFiles -bool false # disable hidden files
+  defaults write com.apple.finder AppleShowAllFiles -bool false # disable hidden files
 fi
 
 if gum confirm "Do you want to enable path bar and status bar?"; then
-defaults write com.apple.finder ShowPathbar -bool true # enable path bar
-defaults write com.apple.finder ShowStatusBar -bool true # enable status bar
+  defaults write com.apple.finder ShowPathbar -bool true # enable path bar
+  defaults write com.apple.finder ShowStatusBar -bool true # enable status bar
 else
-defaults write com.apple.finder ShowPathbar -bool false # disable path bar
-defaults write com.apple.finder ShowStatusBar -bool false # disable status bar
+  defaults write com.apple.finder ShowPathbar -bool false # disable path bar
+  defaults write com.apple.finder ShowStatusBar -bool false # disable status bar
 fi
 
 finder_view_choice=$(gum choose list icon)
 case "$finder_view_choice" in
-list)
-defaults write com.apple.finder FXPreferredViewStyle -string "Nlsv" # set list view default
-;;
-icon)
-defaults write com.apple.finder FXPreferredViewStyle -string "icnv" # set icon view default
-;;
+  list)
+    defaults write com.apple.finder FXPreferredViewStyle -string "Nlsv" # set list view default
+    ;;
+  icon)
+    defaults write com.apple.finder FXPreferredViewStyle -string "icnv" # set icon view default
+    ;;
 esac
 
 if gum confirm "Do you want to start finder from $HOME folder?"; then
-defaults write com.apple.finder NewWindowTarget -string "PfHm" # set new finder windows to open in home
-defaults write com.apple.finder NewWindowTargetPath -string "file://${HOME}/" # set Finder home path to user's home folder
+  defaults write com.apple.finder NewWindowTarget -string "PfHm" # set new finder windows to open in home
+  defaults write com.apple.finder NewWindowTargetPath -string "file://${HOME}/" # set Finder home path to user's home folder
 fi
 
 if gum confirm "Do you want to enable text selection in Quick look?"; then
-defaults write com.apple.finder QLEnableTextSelection -bool true # enable text selection in quick look
+  defaults write com.apple.finder QLEnableTextSelection -bool true # enable text selection in quick look
 else
-defaults write com.apple.finder QLEnableTextSelection -bool false # disable text selection in quick look
+  defaults write com.apple.finder QLEnableTextSelection -bool false # disable text selection in quick look
 fi
 
 if gum confirm "Do you want to disable storing DS_Store files on network?"; then
-defaults write com.apple.desktopservices DSDontWriteNetworkStores -bool true # don't store DS_Store files on network
+  defaults write com.apple.desktopservices DSDontWriteNetworkStores -bool true # don't store DS_Store files on network
 else
-defaults write com.apple.desktopservices DSDontWriteNetworkStores -bool false # store DS_Store files on network
+  defaults write com.apple.desktopservices DSDontWriteNetworkStores -bool false # store DS_Store files on network
 fi
 
 echo "Finder settings are finished..."
 
 # Keyboard
 if gum confirm "Do you want automatic periods, capitalization, spelling, quotes to get disabled in your keyboard?"; then
-defaults write NSGlobalDomain NSAutomaticSpellingCorrectionEnabled -bool false # disable automatic spelling
-defaults write NSGlobalDomain NSAutomaticCapitalizationEnabled -bool false # disable automatic capitalization
-defaults write NSGlobalDomain NSAutomaticPeriodSubstitutionEnabled -bool false # disable automatic period substitution
-defaults write NSGlobalDomain NSAutomaticQuoteSubstitutionEnabled -bool false # disable automatic quote substitution
-defaults write NSGlobalDomain NSAutomaticDashSubstitutionEnabled -bool false # disable automatic dash substitution
+  defaults write NSGlobalDomain NSAutomaticSpellingCorrectionEnabled -bool false # disable automatic spelling
+  defaults write NSGlobalDomain NSAutomaticCapitalizationEnabled -bool false # disable automatic capitalization
+  defaults write NSGlobalDomain NSAutomaticPeriodSubstitutionEnabled -bool false # disable automatic period substitution
+  defaults write NSGlobalDomain NSAutomaticQuoteSubstitutionEnabled -bool false # disable automatic quote substitution
+  defaults write NSGlobalDomain NSAutomaticDashSubstitutionEnabled -bool false # disable automatic dash substitution
 else
-defaults write NSGlobalDomain NSAutomaticSpellingCorrectionEnabled -bool true # enable automatic spelling
-defaults write NSGlobalDomain NSAutomaticCapitalizationEnabled -bool true # enable automatic capitalization
-defaults write NSGlobalDomain NSAutomaticPeriodSubstitutionEnabled -bool true # enable automatic period substitution
-defaults write NSGlobalDomain NSAutomaticQuoteSubstitutionEnabled -bool true # enable automatic quote substitution
-defaults write NSGlobalDomain NSAutomaticDashSubstitutionEnabled -bool true # enable automatic dash substitution
+  defaults write NSGlobalDomain NSAutomaticSpellingCorrectionEnabled -bool true # enable automatic spelling
+  defaults write NSGlobalDomain NSAutomaticCapitalizationEnabled -bool true # enable automatic capitalization
+  defaults write NSGlobalDomain NSAutomaticPeriodSubstitutionEnabled -bool true # enable automatic period substitution
+  defaults write NSGlobalDomain NSAutomaticQuoteSubstitutionEnabled -bool true # enable automatic quote substitution
+  defaults write NSGlobalDomain NSAutomaticDashSubstitutionEnabled -bool true # enable automatic dash substitution
 fi
 echo "Keyboard settings are finished..."
 
 # Trackpad
 if gum confirm "Do you want to disable natural scroll?"; then
-defaults write NSGlobalDomain com.apple.swipescrolldirection -bool false # disable natural scrolling in trackpad
+  defaults write NSGlobalDomain com.apple.swipescrolldirection -bool false # disable natural scrolling in trackpad
 else
-defaults write NSGlobalDomain com.apple.swipescrolldirection -bool true # enable natural scrolling in trackpad
+  defaults write NSGlobalDomain com.apple.swipescrolldirection -bool true # enable natural scrolling in trackpad
 fi
 echo "Trackpad settings are finished..."
 
