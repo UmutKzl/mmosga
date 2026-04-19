@@ -1,2 +1,6 @@
 #!/usr/bin/env bash
-shfmt -w -i 2 mmosga.sh
+
+FILE="mmosga.sh"
+
+echo "Formatting $FILE"
+shfmt -w -i 2 "$FILE"
