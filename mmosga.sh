@@ -127,17 +127,18 @@ echo "Trackpad settings are finished..."
 next
 
 # Kill services
-killall Dock SystemUIServer Finder TextEdit || true
+killall Dock SystemUIServer Finder || true
 
 next
 
 # Choose apps and install them
-apps="spotify google-chrome ungoogled-chromium firefox vivaldi \
-  lazygit visual-studio-code zed neovim neovide-app emacs helix godot antigravity \
-  cursor windsurf tmux zellij fzf ripgrep bat eza zoxide gh python node wezterm \
-  alacritty kitty ghostty utm raycast mac-mouse-fix betterdisplay wallspace caffeine rectangle \
-  steam epic-games gog-galaxy parallels crossover heroic luanti supertuxkart obs \
-  lm-studio ollama claude claude-code opencode chatgpt chatgpt-atlas llama.cpp"
+apps="spotify google-chrome ungoogled-chromium firefox vivaldi lazygit              \
+  visual-studio-code zed neovim neovide-app emacs helix godot antigravity           \
+  cursor windsurf tmux zellij fzf ripgrep bat eza zoxide gh python node wezterm     \
+  alacritty kitty ghostty utm parallels raycast mac-mouse-fix betterdisplay         \
+  wallspace caffeine rectangle steam epic-games gog-galaxy crossover heroic         \
+  luanti supertuxkart obs lm-studio ollama claude claude-code opencode chatgpt      \
+  chatgpt-atlas llama.cpp"
 
 app_selection=$(gum choose --no-limit $apps --header "Select apps to install")
 
@@ -183,6 +184,7 @@ if command -v nvim >/dev/null; then
       echo "Don't forget to read wiki https://docs.astronvim.com/#-setup"
       ;;
     esac
+    echo "Configured Neovim!"
   else
     echo "Skipping Neovim config section..."
   fi
@@ -205,6 +207,7 @@ if command -v emacs >/dev/null; then
       git clone --depth 1 https://github.com/syl20bnr/spacemacs ~/.config/emacs
       ;;
     esac
+    echo "Configured emacs!"
   else
     echo "Skipping Emacs config section..."
   fi
@@ -238,6 +241,7 @@ if command -v zsh >/dev/null; then
       echo 'alias la="eza -a"' >>~/.zshrc
       echo 'alias tree="eza -T"' >>~/.zshrc
     fi
+    echo "Configured zsh!"
   else
     echo "Skipping Zsh config section..."
   fi
@@ -256,10 +260,32 @@ if command -v ghostty >/dev/null; then
       ~/.config/ghostty/config.ghostty
     scheme=$(ghostty +list-themes | sed -E 's/ \(resources\)$//' | gum choose --header "Select a color scheme")
     echo "theme = $scheme" >>~/.config/ghostty/config.ghostty
+    echo "Configured Ghostty!"
   else
     echo "Skipping Ghostty config section..."
   fi
 fi
+next
+
+
+# TextEdit
+if gum confirm "Do you want to start blank when using TextEdit?"; then
+  defaults write com.apple.TextEdit NSShowAppCentricOpenPanelInsteadOfUntitledFile -bool false
+else
+  defaults write com.apple.TextEdit NSShowAppCentricOpenPanelInsteadOfUntitledFile -bool true
+fi
+if gum confirm "Do you want to disable ruler in TextEdit?"; then
+  defaults write com.apple.TextEdit ShowRuler -bool false
+else
+  defaults write com.apple.TextEdit ShowRuler -bool true
+fi
+fontsize=$(gum input --header 'Font size for TextEdit' --value '20')
+if [ -n "$fontsize" ]; then
+  defaults write com.apple.TextEdit "NSFixedPitchFontSize" -int $fontsize
+  defaults write com.apple.TextEdit "NSFontSize" -int $fontsize
+fi
+killall TextEdit || true
+echo "Configured TextEdit!"
 next
 
 echo "Everything is got finished. Good luck!"
