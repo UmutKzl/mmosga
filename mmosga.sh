@@ -267,7 +267,6 @@ if command -v ghostty >/dev/null; then
 fi
 next
 
-
 # TextEdit
 if gum confirm "Do you want to start blank when using TextEdit?"; then
   defaults write com.apple.TextEdit NSShowAppCentricOpenPanelInsteadOfUntitledFile -bool false
