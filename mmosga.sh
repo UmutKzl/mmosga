@@ -12,7 +12,7 @@ if ! command -v gum >/dev/null; then
 fi
 
 next() {
-  sleep 2
+  sleep 0.5
   clear
 }
 
