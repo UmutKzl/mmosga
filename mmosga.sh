@@ -131,23 +131,73 @@ killall Dock SystemUIServer Finder || true
 
 next
 
-# Choose apps and install them
-apps="spotify google-chrome ungoogled-chromium firefox vivaldi lazygit              \
-  visual-studio-code zed neovim neovide-app emacs helix godot antigravity           \
-  cursor windsurf tmux zellij fzf ripgrep bat eza zoxide gh python node wezterm     \
-  alacritty kitty ghostty utm parallels raycast mac-mouse-fix betterdisplay         \
-  wallspace caffeine rectangle steam epic-games gog-galaxy crossover heroic         \
-  luanti supertuxkart obs lm-studio ollama claude claude-code opencode chatgpt      \
-  chatgpt-atlas llama.cpp"
+# Install apps
+TERMINAL_DEV="neovim helix tmux zellij fzf ripgrep bat eza zoxide gh lazygit python node llama.cpp"
+GUI_DEV="visual-studio-code zed neovide-app emacs cursor windsurf wezterm alacritty kitty ghostty"
+AI_TOOLS="lm-studio ollama claude claude-code opencode chatgpt chatgpt-atlas"
+BROWSERS="google-chrome ungoogled-chromium firefox vivaldi"
+GAMES="steam epic-games gog-galaxy crossover heroic luanti supertuxkart godot antigravity"
+VIRTUALIZATION="utm parallels"
+PRODUCTIVITY="raycast mac-mouse-fix betterdisplay wallspace caffeine rectangle obs spotify"
+ALL_APPS="$TERMINAL_DEV $GUI_DEV $AI_TOOLS $BROWSERS $GAMES $VIRTUALIZATION $PRODUCTIVITY"
 
-app_selection=$(gum choose --no-limit $apps --header "Select apps to install")
-
-if [ -n "$app_selection" ]; then
-  brew install $app_selection
-else
-  echo "No package selected, continuing..."
+selected_templates=$(gum choose --no-limit \
+  "Terminal Development" \
+  "GUI Development" \
+  "AI & LLM Tools" \
+  "Browsers" \
+  "Games" \
+  "Virtualization" \
+  "Productivity & Utilities" \
+  "Custom" \
+  --header "Select app templates to install (space to select, enter to confirm)")
+ 
+app_selection=""
+ 
+if echo "$selected_templates" | grep -q "Terminal Development"; then
+  app_selection="$app_selection $TERMINAL_DEV"
 fi
+ 
+if echo "$selected_templates" | grep -q "GUI Development"; then
+  app_selection="$app_selection $GUI_DEV"
+fi
+ 
+if echo "$selected_templates" | grep -q "AI & LLM Tools"; then
+  app_selection="$app_selection $AI_TOOLS"
+fi
+ 
+if echo "$selected_templates" | grep -q "Browsers"; then
+  app_selection="$app_selection $BROWSERS"
+fi
+ 
+if echo "$selected_templates" | grep -q "Games"; then
+  app_selection="$app_selection $GAMES"
+fi
+ 
+if echo "$selected_templates" | grep -q "Virtualization"; then
+  app_selection="$app_selection $VIRTUALIZATION"
+fi
+ 
+if echo "$selected_templates" | grep -q "Productivity & Utilities"; then
+  app_selection="$app_selection $PRODUCTIVITY"
+fi
+ 
+if echo "$selected_templates" | grep -q "Custom"; then
+  custom_selection=$(gum choose --no-limit $ALL_APPS \
+    --header "Custom: select individual apps to install")
+  app_selection="$app_selection $custom_selection"
+fi
+ 
+if [ -n "$(echo "$app_selection" | tr -s ' ')" ]; then
+  unique_apps=$(echo "$app_selection" | tr ' ' '\n' | sort -u | tr '\n' ' ')
+  echo "Installing: $unique_apps"
+  brew install $unique_apps
+else
+  echo "No apps selected, continuing..."
+fi
+ 
 next
+
 
 # Rosetta 2
 if ! pkgutil --pkg-info com.apple.pkg.RosettaUpdateAuto >/dev/null &&
