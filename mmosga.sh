@@ -151,43 +151,43 @@ selected_templates=$(gum choose --no-limit \
   "Productivity & Utilities" \
   "Custom" \
   --header "Select app templates to install (space to select, enter to confirm)")
- 
+
 app_selection=""
- 
+
 if echo "$selected_templates" | grep -q "Terminal Development"; then
   app_selection="$app_selection $TERMINAL_DEV"
 fi
- 
+
 if echo "$selected_templates" | grep -q "GUI Development"; then
   app_selection="$app_selection $GUI_DEV"
 fi
- 
+
 if echo "$selected_templates" | grep -q "AI & LLM Tools"; then
   app_selection="$app_selection $AI_TOOLS"
 fi
- 
+
 if echo "$selected_templates" | grep -q "Browsers"; then
   app_selection="$app_selection $BROWSERS"
 fi
- 
+
 if echo "$selected_templates" | grep -q "Games"; then
   app_selection="$app_selection $GAMES"
 fi
- 
+
 if echo "$selected_templates" | grep -q "Virtualization"; then
   app_selection="$app_selection $VIRTUALIZATION"
 fi
- 
+
 if echo "$selected_templates" | grep -q "Productivity & Utilities"; then
   app_selection="$app_selection $PRODUCTIVITY"
 fi
- 
+
 if echo "$selected_templates" | grep -q "Custom"; then
   custom_selection=$(gum choose --no-limit $ALL_APPS \
     --header "Custom: select individual apps to install")
   app_selection="$app_selection $custom_selection"
 fi
- 
+
 if [ -n "$(echo "$app_selection" | tr -s ' ')" ]; then
   unique_apps=$(echo "$app_selection" | tr ' ' '\n' | sort -u | tr '\n' ' ')
   echo "Installing: $unique_apps"
@@ -195,9 +195,8 @@ if [ -n "$(echo "$app_selection" | tr -s ' ')" ]; then
 else
   echo "No apps selected, continuing..."
 fi
- 
-next
 
+next
 
 # Rosetta 2
 if ! pkgutil --pkg-info com.apple.pkg.RosettaUpdateAuto >/dev/null &&
