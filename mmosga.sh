@@ -16,6 +16,22 @@ next() {
   clear
 }
 
+install_category() {
+  local header="$1"
+  local apps="$2"
+
+  local selection
+  selection=$(gum choose --no-limit $apps \
+    --header "$header")
+
+  if [ -n "$(echo "$selection" | tr -d ' ')" ]; then
+    echo "Installing: $selection"
+    brew install $selection
+  else
+    echo "No apps selected, skipping..."
+  fi
+}
+
 next
 
 if ! gum confirm "Do you want to proceed?"; then
@@ -31,107 +47,106 @@ fi
 brewprefix="$(brew --prefix)"
 
 next
+
 # Dock
 if gum confirm "Do you want to enable magnification?"; then
-  defaults write com.apple.dock magnification -bool true # enable magnification
-  defaults write com.apple.dock largesize -int 80        # set magnification level
+  defaults write com.apple.dock magnification -bool true
+  defaults write com.apple.dock largesize -int 80
 else
-  defaults write com.apple.dock magnification -bool false # disable magnification
+  defaults write com.apple.dock magnification -bool false
 fi
 
 if gum confirm "Do you want to disable recent apps from dock?"; then
-  defaults write com.apple.dock show-recents -bool false # disable recent apps
+  defaults write com.apple.dock show-recents -bool false
 else
-  defaults write com.apple.dock show-recents -bool true # enable recent apps
+  defaults write com.apple.dock show-recents -bool true
 fi
 
 if gum confirm "Do you want to autohide dock?"; then
-  defaults write com.apple.dock autohide -bool true               # enable autohide
-  defaults write com.apple.dock autohide-time-modifier -float 0.5 # speed up autohide animation
-  defaults write com.apple.dock autohide-delay -float 0           # remove autohide delay
+  defaults write com.apple.dock autohide -bool true
+  defaults write com.apple.dock autohide-time-modifier -float 0.5
+  defaults write com.apple.dock autohide-delay -float 0
 else
-  defaults write com.apple.dock autohide -bool false # disable autohide
+  defaults write com.apple.dock autohide -bool false
 fi
 echo "Dock settings are finished..."
 next
 
 # Finder
 if gum confirm "Do you want to see hidden files by default?"; then
-  defaults write com.apple.finder AppleShowAllFiles -bool true # enable hidden files
+  defaults write com.apple.finder AppleShowAllFiles -bool true
 else
-  defaults write com.apple.finder AppleShowAllFiles -bool false # disable hidden files
+  defaults write com.apple.finder AppleShowAllFiles -bool false
 fi
 
 if gum confirm "Do you want to enable path bar and status bar?"; then
-  defaults write com.apple.finder ShowPathbar -bool true   # enable path bar
-  defaults write com.apple.finder ShowStatusBar -bool true # enable status bar
+  defaults write com.apple.finder ShowPathbar -bool true
+  defaults write com.apple.finder ShowStatusBar -bool true
 else
-  defaults write com.apple.finder ShowPathbar -bool false   # disable path bar
-  defaults write com.apple.finder ShowStatusBar -bool false # disable status bar
+  defaults write com.apple.finder ShowPathbar -bool false
+  defaults write com.apple.finder ShowStatusBar -bool false
 fi
 
 finder_view_choice=$(gum choose list icon)
 case "$finder_view_choice" in
 list)
-  defaults write com.apple.finder FXPreferredViewStyle -string "Nlsv" # set list view default
+  defaults write com.apple.finder FXPreferredViewStyle -string "Nlsv"
   ;;
 icon)
-  defaults write com.apple.finder FXPreferredViewStyle -string "icnv" # set icon view default
+  defaults write com.apple.finder FXPreferredViewStyle -string "icnv"
   ;;
 esac
 
 if gum confirm "Do you want to start finder from $HOME folder?"; then
-  defaults write com.apple.finder NewWindowTarget -string "PfHm"                # set new finder windows to open in home
-  defaults write com.apple.finder NewWindowTargetPath -string "file://${HOME}/" # set Finder home path to user's home
+  defaults write com.apple.finder NewWindowTarget -string "PfHm"
+  defaults write com.apple.finder NewWindowTargetPath -string "file://${HOME}/"
 fi
 
-if gum confirm "Do you want to enable text selection in Quick look?"; then
-  defaults write com.apple.finder QLEnableTextSelection -bool true # enable text selection in quick look
+if gum confirm "Do you want to enable text selection in Quick Look?"; then
+  defaults write com.apple.finder QLEnableTextSelection -bool true
 else
-  defaults write com.apple.finder QLEnableTextSelection -bool false # disable text selection in quick look
+  defaults write com.apple.finder QLEnableTextSelection -bool false
 fi
 
 if gum confirm "Do you want to disable storing DS_Store files on network?"; then
-  defaults write com.apple.desktopservices DSDontWriteNetworkStores -bool true # don't store DS_Store files on network
+  defaults write com.apple.desktopservices DSDontWriteNetworkStores -bool true
 else
-  defaults write com.apple.desktopservices DSDontWriteNetworkStores -bool false # store DS_Store files on network
+  defaults write com.apple.desktopservices DSDontWriteNetworkStores -bool false
 fi
-
 echo "Finder settings are finished..."
 next
 
 # Keyboard
-if gum confirm "Do you want automatic periods, capitalization, spelling, quotes to get disabled in your keyboard?"; then
-  defaults write NSGlobalDomain NSAutomaticSpellingCorrectionEnabled -bool false # disable automatic spelling
-  defaults write NSGlobalDomain NSAutomaticCapitalizationEnabled -bool false     # disable automatic capitalization
-  defaults write NSGlobalDomain NSAutomaticPeriodSubstitutionEnabled -bool false # disable automatic period substitution
-  defaults write NSGlobalDomain NSAutomaticQuoteSubstitutionEnabled -bool false  # disable automatic quote substitution
-  defaults write NSGlobalDomain NSAutomaticDashSubstitutionEnabled -bool false   # disable automatic dash substitution
+if gum confirm "Do you want to disable automatic periods, capitalization, spelling, and quotes?"; then
+  defaults write NSGlobalDomain NSAutomaticSpellingCorrectionEnabled -bool false
+  defaults write NSGlobalDomain NSAutomaticCapitalizationEnabled -bool false
+  defaults write NSGlobalDomain NSAutomaticPeriodSubstitutionEnabled -bool false
+  defaults write NSGlobalDomain NSAutomaticQuoteSubstitutionEnabled -bool false
+  defaults write NSGlobalDomain NSAutomaticDashSubstitutionEnabled -bool false
 else
-  defaults write NSGlobalDomain NSAutomaticSpellingCorrectionEnabled -bool true # enable automatic spelling
-  defaults write NSGlobalDomain NSAutomaticCapitalizationEnabled -bool true     # enable automatic capitalization
-  defaults write NSGlobalDomain NSAutomaticPeriodSubstitutionEnabled -bool true # enable automatic period substitution
-  defaults write NSGlobalDomain NSAutomaticQuoteSubstitutionEnabled -bool true  # enable automatic quote substitution
-  defaults write NSGlobalDomain NSAutomaticDashSubstitutionEnabled -bool true   # enable automatic dash substitution
+  defaults write NSGlobalDomain NSAutomaticSpellingCorrectionEnabled -bool true
+  defaults write NSGlobalDomain NSAutomaticCapitalizationEnabled -bool true
+  defaults write NSGlobalDomain NSAutomaticPeriodSubstitutionEnabled -bool true
+  defaults write NSGlobalDomain NSAutomaticQuoteSubstitutionEnabled -bool true
+  defaults write NSGlobalDomain NSAutomaticDashSubstitutionEnabled -bool true
 fi
 echo "Keyboard settings are finished..."
 next
 
 # Trackpad
 if gum confirm "Do you want to disable natural scroll?"; then
-  defaults write NSGlobalDomain com.apple.swipescrolldirection -bool false # disable natural scrolling in trackpad
+  defaults write NSGlobalDomain com.apple.swipescrolldirection -bool false
 else
-  defaults write NSGlobalDomain com.apple.swipescrolldirection -bool true # enable natural scrolling in trackpad
+  defaults write NSGlobalDomain com.apple.swipescrolldirection -bool true
 fi
 echo "Trackpad settings are finished..."
 next
 
 # Kill services
 killall Dock SystemUIServer Finder || true
-
 next
 
-# Install apps
+# App categories
 TERMINAL_DEV="neovim helix tmux zellij fzf ripgrep bat eza zoxide gh lazygit python node llama.cpp"
 GUI_DEV="visual-studio-code zed neovide-app emacs cursor windsurf wezterm alacritty kitty ghostty"
 AI_TOOLS="lm-studio ollama claude claude-code opencode chatgpt chatgpt-atlas"
@@ -152,48 +167,36 @@ selected_templates=$(gum choose --no-limit \
   "Custom" \
   --header "Select app templates to install (space to select, enter to confirm)")
 
-app_selection=""
-
 if echo "$selected_templates" | grep -q "Terminal Development"; then
-  app_selection="$app_selection $TERMINAL_DEV"
+  install_category "Terminal development" "$TERMINAL_DEV"
 fi
 
 if echo "$selected_templates" | grep -q "GUI Development"; then
-  app_selection="$app_selection $GUI_DEV"
+  install_category "GUI development" "$GUI_DEV"
 fi
 
 if echo "$selected_templates" | grep -q "AI & LLM Tools"; then
-  app_selection="$app_selection $AI_TOOLS"
+  install_category "AI & LLM Tools" "$AI_TOOLS"
 fi
 
 if echo "$selected_templates" | grep -q "Browsers"; then
-  app_selection="$app_selection $BROWSERS"
+  install_category "Browsers" "$BROWSERS"
 fi
 
 if echo "$selected_templates" | grep -q "Games"; then
-  app_selection="$app_selection $GAMES"
+  install_category "Games" "$GAMES"
 fi
 
 if echo "$selected_templates" | grep -q "Virtualization"; then
-  app_selection="$app_selection $VIRTUALIZATION"
+  install_category "Virtualization" "$VIRTUALIZATION"
 fi
 
 if echo "$selected_templates" | grep -q "Productivity & Utilities"; then
-  app_selection="$app_selection $PRODUCTIVITY"
+  install_category "Productivity & Utilities" "$PRODUCTIVITY"
 fi
 
 if echo "$selected_templates" | grep -q "Custom"; then
-  custom_selection=$(gum choose --no-limit $ALL_APPS \
-    --header "Custom: select individual apps to install")
-  app_selection="$app_selection $custom_selection"
-fi
-
-if [ -n "$(echo "$app_selection" | tr -s ' ')" ]; then
-  unique_apps=$(echo "$app_selection" | tr ' ' '\n' | sort -u | tr '\n' ' ')
-  echo "Installing: $unique_apps"
-  brew install $unique_apps
-else
-  echo "No apps selected, continuing..."
+  install_category "Custom: select individual apps" "$ALL_APPS"
 fi
 
 next
@@ -221,7 +224,7 @@ if command -v nvim >/dev/null; then
     nvchad)
       git clone --depth 1 https://github.com/NvChad/starter ~/.config/nvim
       rm -rf ~/.config/nvim/.git
-      echo "Don't forget to read wiki https://nvchad.com/docs/quickstart/install"
+      echo "Don't forget to read the wiki: https://nvchad.com/docs/quickstart/install"
       ;;
     lazyvim)
       git clone --depth 1 https://github.com/LazyVim/starter ~/.config/nvim
@@ -230,7 +233,7 @@ if command -v nvim >/dev/null; then
     astronvim)
       git clone --depth 1 https://github.com/AstroNvim/template ~/.config/nvim
       rm -rf ~/.config/nvim/.git
-      echo "Don't forget to read wiki https://docs.astronvim.com/#-setup"
+      echo "Don't forget to read the wiki: https://docs.astronvim.com/#-setup"
       ;;
     esac
     echo "Configured Neovim!"
@@ -244,7 +247,7 @@ next
 if command -v emacs >/dev/null; then
   [[ "$force" == "true" ]] && rm -rf ~/.config/emacs || true
   if [ ! -d "$HOME/.emacs.d" ] && [ ! -d "$HOME/.config/emacs" ] &&
-    gum confirm "Do you want to install a Emacs config?"; then
+    gum confirm "Do you want to install an Emacs config?"; then
     distro=$(gum choose --header "Emacs distro" spacemacs doom-emacs)
 
     case "$distro" in
@@ -256,7 +259,7 @@ if command -v emacs >/dev/null; then
       git clone --depth 1 https://github.com/syl20bnr/spacemacs ~/.config/emacs
       ;;
     esac
-    echo "Configured emacs!"
+    echo "Configured Emacs!"
   else
     echo "Skipping Emacs config section..."
   fi
@@ -270,19 +273,20 @@ if command -v zsh >/dev/null; then
     if gum confirm "Do you want to use zsh-syntax-highlighting?"; then
       [[ ! -f "$brewprefix/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh" ]] &&
         brew install zsh-syntax-highlighting
-      echo "source $brewprefix/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh" >>~/.zshrc # enable highlight
+      echo "source $brewprefix/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh" >>~/.zshrc
     fi
     if gum confirm "Do you want to use zsh-autosuggestions?"; then
-      [[ ! -f "$brewprefix/share/zsh-autosuggestions/zsh-autosuggestions.zsh" ]] && brew install zsh-autosuggestions
-      echo "source $brewprefix/share/zsh-autosuggestions/zsh-autosuggestions.zsh" >>~/.zshrc # enable autosuggestions
+      [[ ! -f "$brewprefix/share/zsh-autosuggestions/zsh-autosuggestions.zsh" ]] &&
+        brew install zsh-autosuggestions
+      echo "source $brewprefix/share/zsh-autosuggestions/zsh-autosuggestions.zsh" >>~/.zshrc
     fi
     if gum confirm "Do you want to use a custom prompt?"; then
-      echo "export PS1='%B%F{Cyan}%~%b%F{white} $ '" >>~/.zshrc # a better prompt
+      echo "export PS1='%B%F{Cyan}%~%b%F{white} $ '" >>~/.zshrc
     fi
-    if gum confirm "Do you want to have a better tab selection?"; then
+    if gum confirm "Do you want to have a better tab completion?"; then
       echo "autoload -Uz compinit" >>~/.zshrc
-      echo "compinit" >>~/.zshrc                           # modern zsh autocomplete system
-      echo "zstyle ':completion:*' menu select" >>~/.zshrc # use arrow keys
+      echo "compinit" >>~/.zshrc
+      echo "zstyle ':completion:*' menu select" >>~/.zshrc
     fi
     if gum confirm "Do you want to use eza (ls alternative)?"; then
       command -v eza >/dev/null || brew install eza || true
@@ -290,7 +294,7 @@ if command -v zsh >/dev/null; then
       echo 'alias la="eza -a"' >>~/.zshrc
       echo 'alias tree="eza -T"' >>~/.zshrc
     fi
-    echo "Configured zsh!"
+    echo "Configured Zsh!"
   else
     echo "Skipping Zsh config section..."
   fi
@@ -302,11 +306,11 @@ if command -v ghostty >/dev/null; then
   [[ "$force" == "true" ]] && rm -rf ~/.config/ghostty || true
   if [ ! -f "$HOME/.config/ghostty/config" ] && [ ! -f "$HOME/.config/ghostty/config.ghostty" ] &&
     gum confirm "Do you want to configure Ghostty?"; then
-    [[ ! -d ~/.config/ghostty ]] && mkdir -p ~/.config/ghostty # create config folder if doesn't exist
-    echo "background-opacity = $(gum input --header 'Transparency (between 0.0 and 1.0)' --value '1.0')" >> \
-      ~/.config/ghostty/config.ghostty
-    gum confirm "Do you want to use Option key as Alt?" && echo "macos-option-as-alt = left" >> \
-      ~/.config/ghostty/config.ghostty
+    [[ ! -d ~/.config/ghostty ]] && mkdir -p ~/.config/ghostty
+    echo "background-opacity = $(gum input --header 'Transparency (between 0.0 and 1.0)' --value '1.0')" \
+      >>~/.config/ghostty/config.ghostty
+    gum confirm "Do you want to use Option key as Alt?" &&
+      echo "macos-option-as-alt = left" >>~/.config/ghostty/config.ghostty
     scheme=$(ghostty +list-themes | sed -E 's/ \(resources\)$//' | gum choose --header "Select a color scheme")
     echo "theme = $scheme" >>~/.config/ghostty/config.ghostty
     echo "Configured Ghostty!"
@@ -329,11 +333,11 @@ else
 fi
 fontsize=$(gum input --header 'Font size for TextEdit' --value '20')
 if [ -n "$fontsize" ]; then
-  defaults write com.apple.TextEdit "NSFixedPitchFontSize" -int $fontsize
-  defaults write com.apple.TextEdit "NSFontSize" -int $fontsize
+  defaults write com.apple.TextEdit "NSFixedPitchFontSize" -int "$fontsize"
+  defaults write com.apple.TextEdit "NSFontSize" -int "$fontsize"
 fi
 killall TextEdit || true
 echo "Configured TextEdit!"
 next
 
-echo "Everything is got finished. Good luck!"
+echo "Everything is finished. Good luck!"
