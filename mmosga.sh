@@ -29,6 +29,7 @@ TWEAK_LIST=(
   "Enable status bar"
   "Disable DS_Store files on network"
   "Disable autocorrecting on keyboard"
+  "Disable natural scroll"
 )
 
 # format TWEAK_LIST as comma's
@@ -123,6 +124,12 @@ else
   defaults write NSGlobalDomain NSAutomaticPeriodSubstitutionEnabled -bool true
   defaults write NSGlobalDomain NSAutomaticQuoteSubstitutionEnabled -bool true
   defaults write NSGlobalDomain NSAutomaticDashSubstitutionEnabled -bool true
+fi
+
+if echo "$TWEAKS" | grep -F -q "Disable natural scroll"; then
+  defaults write NSGlobalDomain com.apple.swipescrolldirection -bool false
+else
+  defaults write NSGlobalDomain com.apple.swipescrolldirection -bool true
 fi
 
 green "Restarting Dock and Finder"
