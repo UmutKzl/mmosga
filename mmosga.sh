@@ -28,6 +28,7 @@ TWEAK_LIST=(
   "Enable path bar"
   "Enable status bar"
   "Disable DS_Store files on network"
+  "Disable autocorrecting on keyboard"
 )
 
 # format TWEAK_LIST as comma's
@@ -106,6 +107,22 @@ if echo "$TWEAKS" | grep -F -q "Disable DS_Store files on network"; then
 else
   echo "Enabling DS_Store files on network"
   defaults write com.apple.desktopservices DSDontWriteNetworkStores -bool false
+fi
+
+if echo "$TWEAKS" | grep -F -q "Disable autocorrecting on keyboard"; then
+  green "Disabling autocorrection"
+  defaults write NSGlobalDomain NSAutomaticSpellingCorrectionEnabled -bool false
+  defaults write NSGlobalDomain NSAutomaticCapitalizationEnabled -bool false
+  defaults write NSGlobalDomain NSAutomaticPeriodSubstitutionEnabled -bool false
+  defaults write NSGlobalDomain NSAutomaticQuoteSubstitutionEnabled -bool false
+  defaults write NSGlobalDomain NSAutomaticDashSubstitutionEnabled -bool false
+else
+  echo "Enabling autocorrection"
+  defaults write NSGlobalDomain NSAutomaticSpellingCorrectionEnabled -bool true
+  defaults write NSGlobalDomain NSAutomaticCapitalizationEnabled -bool true
+  defaults write NSGlobalDomain NSAutomaticPeriodSubstitutionEnabled -bool true
+  defaults write NSGlobalDomain NSAutomaticQuoteSubstitutionEnabled -bool true
+  defaults write NSGlobalDomain NSAutomaticDashSubstitutionEnabled -bool true
 fi
 
 green "Restarting Dock and Finder"
