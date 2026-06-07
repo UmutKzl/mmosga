@@ -127,8 +127,10 @@ else
 fi
 
 if echo "$TWEAKS" | grep -F -q "Disable natural scroll"; then
+  green "Disabling natural scroll"
   defaults write NSGlobalDomain com.apple.swipescrolldirection -bool false
 else
+  echo "Enabling natural scroll"
   defaults write NSGlobalDomain com.apple.swipescrolldirection -bool true
 fi
 
