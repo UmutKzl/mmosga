@@ -55,7 +55,7 @@ if echo "$TWEAKS" | grep -F -q "Disable recent apps from Dock"; then
   green "Disabling recent apps in Dock"
   defaults write com.apple.dock show-recents -bool false
 else
-  echo "Enabling recent apps in Dock."
+  blue "Enabling recent apps in Dock."
   defaults write com.apple.dock show-recents -bool true
 fi
 
@@ -65,7 +65,7 @@ if echo "$TWEAKS" | grep -F -q "Autohide Dock"; then
   defaults write com.apple.dock autohide-time-modifier -float 0.5
   defaults write com.apple.dock autohide-delay -float 0
 else
-  echo "Showing Dock"
+  blue "Showing Dock"
   defaults write com.apple.dock autohide -bool false
 fi
 
@@ -74,7 +74,7 @@ if echo "$TWEAKS" | grep -F -q "Enable Dock magnification"; then
   defaults write com.apple.dock magnification -bool true
   defaults write com.apple.dock largesize -int 80
 else
-  echo "Disabling Dock magnification"
+  blue "Disabling Dock magnification"
   defaults write com.apple.dock magnification -bool false
 fi
 
@@ -82,7 +82,7 @@ if echo "$TWEAKS" | grep -F -q "See hidden files by default"; then
   green "Showing hidden files"
   defaults write com.apple.finder AppleShowAllFiles -bool true
 else
-  echo "Hiding hidden files"
+  blue "Hiding hidden files"
   defaults write com.apple.finder AppleShowAllFiles -bool false
 fi
 
@@ -90,7 +90,7 @@ if echo "$TWEAKS" | grep -F -q "Enable path bar"; then
   green "Enabling path bar"
   defaults write com.apple.finder ShowPathbar -bool true
 else
-  echo "Hiding path bar"
+  blue "Hiding path bar"
   defaults write com.apple.finder ShowPathbar -bool false
 fi
 
@@ -98,7 +98,7 @@ if echo "$TWEAKS" | grep -F -q "Enable status bar"; then
   green "Enabling status bar"
   defaults write com.apple.finder ShowStatusBar -bool true
 else
-  echo "Disabling status bar"
+  blue "Disabling status bar"
   defaults write com.apple.finder ShowStatusBar -bool false
 fi
 
@@ -106,7 +106,7 @@ if echo "$TWEAKS" | grep -F -q "Disable DS_Store files on network"; then
   green "Disabling DS_Store files on network"
   defaults write com.apple.desktopservices DSDontWriteNetworkStores -bool true
 else
-  echo "Enabling DS_Store files on network"
+  blue "Enabling DS_Store files on network"
   defaults write com.apple.desktopservices DSDontWriteNetworkStores -bool false
 fi
 
@@ -118,7 +118,7 @@ if echo "$TWEAKS" | grep -F -q "Disable autocorrecting on keyboard"; then
   defaults write NSGlobalDomain NSAutomaticQuoteSubstitutionEnabled -bool false
   defaults write NSGlobalDomain NSAutomaticDashSubstitutionEnabled -bool false
 else
-  echo "Enabling autocorrection"
+  blue "Enabling autocorrection"
   defaults write NSGlobalDomain NSAutomaticSpellingCorrectionEnabled -bool true
   defaults write NSGlobalDomain NSAutomaticCapitalizationEnabled -bool true
   defaults write NSGlobalDomain NSAutomaticPeriodSubstitutionEnabled -bool true
@@ -130,7 +130,7 @@ if echo "$TWEAKS" | grep -F -q "Disable natural scroll"; then
   green "Disabling natural scroll"
   defaults write NSGlobalDomain com.apple.swipescrolldirection -bool false
 else
-  echo "Enabling natural scroll"
+  blue "Enabling natural scroll"
   defaults write NSGlobalDomain com.apple.swipescrolldirection -bool true
 fi
 
