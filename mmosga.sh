@@ -24,6 +24,7 @@ TWEAK_LIST=(
   "Disable recent apps from Dock"
   "Autohide Dock"
   "Enable Dock magnification"
+  "Disable Dock delay"
   "See hidden files by default"
   "Enable path bar"
   "Enable status bar"
@@ -76,6 +77,16 @@ if echo "$TWEAKS" | grep -F -q "Enable Dock magnification"; then
 else
   blue "Disabling Dock magnification"
   defaults write com.apple.dock magnification -bool false
+fi
+
+if echo "$TWEAKS" | grep -F -q "Disable Dock delay"; then
+  green "Disabling Dock delay"
+  defaults write com.apple.dock autohide-delay -float 0
+  defaults write com.apple.dock autohide-time-modifier -float 0.3;
+else
+  blue "Enabling Dock delay"
+  defaults delete com.apple.dock autohide-time-modifier
+  defaults delete com.apple.dock autohide-delay
 fi
 
 if echo "$TWEAKS" | grep -F -q "See hidden files by default"; then
