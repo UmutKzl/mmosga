@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+set -e
 
 # colors
 red() { printf "\e[1;31m$1\e[0m\n"; }
