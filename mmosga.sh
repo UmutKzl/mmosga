@@ -32,6 +32,7 @@ TWEAK_LIST=(
   "Disable DS_Store files on network"
   "Disable autocorrecting on keyboard"
   "Disable natural scroll"
+  "Enable key repeating in VSCode"
 )
 
 # format TWEAK_LIST as comma's
@@ -145,6 +146,15 @@ else
   blue "Enabling natural scroll"
   defaults write NSGlobalDomain com.apple.swipescrolldirection -bool true
 fi
+
+if echo "$TWEAKS" | grep -F -q "Enable key repeating in VSCode"; then
+  green "Enabling key repeating in VSCode"
+  defaults write com.microsoft.VSCode ApplePressAndHoldEnabled -bool false
+else
+  blue "Disabling key repeating in VSCode"
+  defaults write com.microsoft.VSCode ApplePressAndHoldEnabled -bool true
+fi
+
 
 green "Restarting Dock and Finder"
 killall -q Dock Finder
